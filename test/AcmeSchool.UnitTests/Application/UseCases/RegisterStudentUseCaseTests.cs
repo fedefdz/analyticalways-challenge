@@ -74,5 +74,23 @@ namespace AcmeSchool.UnitTests.Application.UseCases.RegisterStudent
             result.Should().Throw<StudentAlreadyExistsException>().Which.ErrorCode.Should().Be((int)DomainErrorCodes.StudentAlreadyExists);
             _mockRepository.Verify(mock => mock.Add(It.IsAny<Student>()), Times.Never);
         }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]        
+        [InlineData(" ")]
+        public void Execute_With_StudentNameEmpty_Throws_StudentInvalidDataException(string studentName)
+        {
+            // Arrange
+            var birthDate = DateTime.Now.AddYears(-RegisterStudentUseCase.MinimumAgeToBeAdult);
+            var studentCommand = new RegisterStudentCommand(studentName, birthDate);
+
+            // Act
+            Action result = () => _useCase.Execute(studentCommand);
+
+            // Assert
+            result.Should().Throw<StudentInvalidDataException>().Which.ErrorCode.Should().Be((int)DomainErrorCodes.StudentInvalidData);
+            _mockRepository.Verify(mock => mock.Add(It.IsAny<Student>()), Times.Never);
+        }
     }
 }

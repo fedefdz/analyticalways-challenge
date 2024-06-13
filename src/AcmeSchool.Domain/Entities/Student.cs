@@ -1,4 +1,6 @@
-﻿namespace AcmeSchool.Domain.Entities
+﻿using AcmeSchool.Domain.ValueObjects;
+
+namespace AcmeSchool.Domain.Entities
 {
     public class Student
     {
@@ -8,17 +10,18 @@
 
         public Student(string name, DateTime birthDate)
         {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentException($"'{nameof(name)}' cannot be empty.", nameof(name));
+            }
+
             Name = name;
             BirthDate = birthDate;
         }
 
         public int GetAge()
         {
-            var age = DateTime.Now.Year - BirthDate.Year;
-            if (DateTime.Now.DayOfYear < BirthDate.DayOfYear)
-                age -= 1;
-
-            return age;
+            return new DateOfBirth(BirthDate).GetAge();
         }
     }
 }

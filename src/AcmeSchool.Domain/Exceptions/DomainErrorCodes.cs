@@ -4,5 +4,6 @@
     {
         StudentAgeInsuffcient = 1001,
         StudentAlreadyExists = 1002,
+        StudentInvalidData = 1003,
     }
 }
