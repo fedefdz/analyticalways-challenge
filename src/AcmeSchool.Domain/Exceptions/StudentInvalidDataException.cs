@@ -2,12 +2,12 @@
 {
     public class StudentInvalidDataException : DomainException
     {
-        public StudentInvalidDataException() : 
-            base((int) DomainErrorCodes.StudentInvalidData, "student data is invalid")
-        { }
-
         public StudentInvalidDataException(string fieldName) :
             base((int)DomainErrorCodes.StudentInvalidData, $"student '{fieldName}' is invalid")
+        { }
+
+        public StudentInvalidDataException(string fieldName, string message) :
+            base((int)DomainErrorCodes.StudentInvalidData, $"student '{fieldName}' {message}")            
         { }
     }
 }

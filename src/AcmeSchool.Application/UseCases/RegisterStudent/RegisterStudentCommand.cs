@@ -1,16 +1,16 @@
-﻿using AcmeSchool.Domain.Exceptions;
-using AcmeSchool.Domain.ValueObjects;
+﻿using AcmeSchool.Application.UseCases.Common;
+using AcmeSchool.Domain.Entities;
+using AcmeSchool.Domain.Exceptions;
 
 namespace AcmeSchool.Application.UseCases.RegisterStudent
 {
-    public record RegisterStudentCommand(string Name, DateTime BirthDate) 
+    public record RegisterStudentCommand(string Name, DateTime BirthDate) : UseCaseCommand
     {
-        public void ValidateIfFailThrow()
+        public override void ValidateIfFailThrow()
         {
-            if (string.IsNullOrWhiteSpace(Name)) throw new StudentInvalidDataException(nameof(Name));
-            if (BirthDate == default) throw new StudentInvalidDataException(nameof(BirthDate));
-
-            var age = new DateOfBirth(BirthDate).GetAge();
+            var student = new Student(Name, BirthDate);
+            
+            var age = student.GetAge();
             if (age < RegisterStudentUseCase.MinimumAgeToBeAdult) throw new StudentAgeInsuffcientException();
         }
     }

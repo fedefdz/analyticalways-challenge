@@ -2,8 +2,11 @@
 {
     public enum DomainErrorCodes
     {
-        StudentAgeInsuffcient = 1001,
-        StudentAlreadyExists = 1002,
-        StudentInvalidData = 1003,
+        StudentAlreadyExists = 1001,
+        StudentInvalidData = 1002,
+        StudentAgeInsuffcient = 1003,
+
+        CourseAlreadyExists = 2001,
+        CourseInvalidData = 2002
     }
 }

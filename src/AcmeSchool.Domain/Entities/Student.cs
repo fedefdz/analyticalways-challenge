@@ -1,4 +1,6 @@
-﻿using AcmeSchool.Domain.ValueObjects;
+﻿using AcmeSchool.Domain.Exceptions;
+using AcmeSchool.Domain.ValueObjects;
+using System.Runtime.CompilerServices;
 
 namespace AcmeSchool.Domain.Entities
 {
@@ -10,10 +12,8 @@ namespace AcmeSchool.Domain.Entities
 
         public Student(string name, DateTime birthDate)
         {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                throw new ArgumentException($"'{nameof(name)}' cannot be empty.", nameof(name));
-            }
+            if (string.IsNullOrWhiteSpace(name)) throw new StudentInvalidDataException(nameof(name), "could not be empty");
+            if (birthDate == default) throw new StudentInvalidDataException(nameof(birthDate), "could not be default"); 
 
             Name = name;
             BirthDate = birthDate;
