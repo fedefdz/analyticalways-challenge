@@ -6,7 +6,7 @@ namespace AcmeSchool.Domain.Entities
 {
     public class Student
     {
-        public int Id { get; private set; }
+        public Guid Id { get; private set; }
         public string Name { get; private set; }
         public DateTime BirthDate { get; private set; }
 
@@ -15,6 +15,7 @@ namespace AcmeSchool.Domain.Entities
             if (string.IsNullOrWhiteSpace(name)) throw new StudentInvalidDataException(nameof(name), "could not be empty");
             if (birthDate == default) throw new StudentInvalidDataException(nameof(birthDate), "could not be default"); 
 
+            Id = Guid.NewGuid();
             Name = name;
             BirthDate = birthDate;
         }
