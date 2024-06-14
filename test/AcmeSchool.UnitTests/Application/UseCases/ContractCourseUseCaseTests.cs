@@ -29,8 +29,8 @@ namespace AcmeSchool.UnitTests.Application.UseCases
             var command = new ContractCourseCommand(course.Id, student.Id, paymentMethod: PaymentMethod.CreditCard);
 
 
-            _courseRepositoryMock.Setup(repo => repo.GetByIdOrDefault(command.CourseId)).Returns(course);
-            _studentRepositoryMock.Setup(repo => repo.GetByIdOrDefault(command.StudentId)).Returns(student);
+            _courseRepositoryMock.Setup(repo => repo.GetByIdOrDefaultAsync(command.CourseId)).ReturnsAsync(course);
+            _studentRepositoryMock.Setup(repo => repo.GetByIdOrDefaultAsync(command.StudentId)).ReturnsAsync(student);
             _paymentRepositoryMock.Setup(repo => repo.AddCourseRegistrationFeePayementAsync(It.IsAny<CourseRegitrationFeePayment>()))
                 .Returns(Task.CompletedTask);
 
@@ -50,7 +50,7 @@ namespace AcmeSchool.UnitTests.Application.UseCases
             // Arrange
             var command = new ContractCourseCommand(CourseId: Guid.NewGuid(), StudentId: Guid.NewGuid(), paymentMethod: PaymentMethod.CreditCard);
 
-            _courseRepositoryMock.Setup(repo => repo.GetByIdOrDefault(command.CourseId)).Returns((Course?)null);
+            _courseRepositoryMock.Setup(repo => repo.GetByIdOrDefaultAsync(command.CourseId)).ReturnsAsync((Course?)null);
 
             // Act
             Func<Task> act = async () => await _useCase.ExcecuteAsync(command);

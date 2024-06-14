@@ -15,7 +15,9 @@
 
         PaymentInvalidData = 3003,
         PaymentAmountInsufficient = 3004,
-        
-        OperationNotAllowed = 9000,
+
+        CourseResgistrationFeePaymentNotFound = 4001,
+
+        OperationNotAllowed = 9000,        
     }
 }

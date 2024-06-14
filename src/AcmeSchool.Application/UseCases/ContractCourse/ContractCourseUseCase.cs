@@ -26,10 +26,10 @@ namespace AcmeSchool.Application.UseCases.ContractCourse
         {
             command.ValidateIfFailThrow();
 
-            Course course = _courseRepository.GetByIdOrDefault(command.CourseId)
+            Course course = await _courseRepository.GetByIdOrDefaultAsync(command.CourseId)
                 ?? throw new CourseNotFoundException();
 
-            Student student = _studentRepository.GetByIdOrDefault(command.StudentId)
+            Student student = await _studentRepository.GetByIdOrDefaultAsync(command.StudentId)
                 ?? throw new StudentNotFoundException();
 
             if (course.IsStudentEnrolled(student)) throw new OperationNotAllowedException("student already enrolled in course.");

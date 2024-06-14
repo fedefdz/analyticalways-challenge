@@ -1,6 +1,7 @@
 ﻿using AcmeSchool.Domain.Entities;
 using AcmeSchool.Domain.Exceptions;
 using AcmeSchool.Domain.Repositories;
+using System.Runtime.CompilerServices;
 
 namespace AcmeSchool.Application.UseCases.RegisterStudent
 {
@@ -15,20 +16,20 @@ namespace AcmeSchool.Application.UseCases.RegisterStudent
             _studentRepository = studentRepository ?? throw new ArgumentNullException(nameof(studentRepository));            
         }
 
-        public void Execute(RegisterStudentCommand command)
+        public async Task ExecuteAsync(RegisterStudentCommand command)
         {
-            ValidateCommandIfFailThrow(command);
+            await ValidateCommandIfFailThrow(command);
 
             var student = new Student(command.Name, command.BirthDate);
             
-            _studentRepository.Add(student);
+            await _studentRepository.AddAsync(student);
         }
 
-        private void ValidateCommandIfFailThrow(RegisterStudentCommand command)
+        private async Task ValidateCommandIfFailThrow(RegisterStudentCommand command)
         {
             command.ValidateIfFailThrow();
             
-            if (_studentRepository.GetByNameOrDefault(command.Name) != null)
+            if (await _studentRepository.GetByNameOrDefaultAsync(command.Name) != null)
                 throw new StudentAlreadyExistsException();
         }
 

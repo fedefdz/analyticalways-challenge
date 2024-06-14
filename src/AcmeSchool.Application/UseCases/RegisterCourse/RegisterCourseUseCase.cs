@@ -13,20 +13,20 @@ namespace AcmeSchool.Application.UseCases.RegisterCourse
             _courseRepository = courseRepository ?? throw new ArgumentNullException(nameof(courseRepository));
         }
 
-        public void Execute(RegisterCourseCommand command)
+        public async Task ExecuteAsync(RegisterCourseCommand command)
         {
-            ValidateCommandIfFailThrow(command);
+            await ValidateCommandIfFailThrow(command);
 
             var course = new Course(command.Name, command.RegistrationFee, command.StartDate, command.EndDate);
 
-            _courseRepository.Add(course);
+            await _courseRepository.AddAsync(course);
         }
 
-        private void ValidateCommandIfFailThrow(RegisterCourseCommand command)
+        private async Task ValidateCommandIfFailThrow(RegisterCourseCommand command)
         {
             command.ValidateIfFailThrow();
 
-            if (_courseRepository.GetByNameOrDefault(command.Name) != null)
+            if (await _courseRepository.GetByNameOrDefaultAsync(command.Name) != null)
                 throw new CourseAlreadyExistsException();
         }
     }

@@ -4,9 +4,9 @@ namespace AcmeSchool.Domain.Repositories
 {
     public interface ICourseRepository
     {
-        void Add(Course course);
-        Course? GetByNameOrDefault(string name);
-        Course? GetByIdOrDefault(Guid id);
-        void Update(Course course);
+        Task AddAsync(Course course);
+        Task<Course?> GetByNameOrDefaultAsync(string name);
+        Task<Course?> GetByIdOrDefaultAsync(Guid id);
+        Task UpdateAsync(Course course);
     }
 }

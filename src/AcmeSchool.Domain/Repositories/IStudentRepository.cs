@@ -4,8 +4,8 @@ namespace AcmeSchool.Domain.Repositories
 {
     public interface IStudentRepository
     {
-        void Add(Student student);
-        Student? GetByNameOrDefault(string name);
-        Student? GetByIdOrDefault(Guid id);
+        Task AddAsync(Student student);
+        Task<Student?> GetByNameOrDefaultAsync(string name);
+        Task<Student?> GetByIdOrDefaultAsync(Guid id);
     }
 }

@@ -24,7 +24,7 @@ namespace AcmeSchool.UnitTests.Application.UseCases
         [Theory]
         [InlineData(-100)]
         [InlineData(0)]
-        public void Execute_With_CourseRegistrationFeeNoPositive_Throws_CourseInvalidDataException(decimal registrationFee)
+        public async Task Execute_With_CourseRegistrationFeeNoPositive_Throws_CourseInvalidDataException(decimal registrationFee)
         {
             // Arrange
             var startDate = DateTime.Now;
@@ -32,15 +32,15 @@ namespace AcmeSchool.UnitTests.Application.UseCases
             var courseCommand = new RegisterCourseCommand(courseName, registrationFee, startDate, startDate.AddMonths(3));
 
             // Act
-            Action result = () => _useCase.Execute(courseCommand);
+            Func<Task> result = async () => await _useCase.ExecuteAsync(courseCommand);
 
             // Assert            
-            result.Should().Throw<CourseInvalidDataException>().Which.ErrorCode.Should().Be((int)DomainErrorCodes.CourseInvalidData);
-            _mockRepository.Verify(mock => mock.Add(It.IsAny<Course>()), Times.Never);
+            (await result.Should().ThrowAsync<CourseInvalidDataException>()).Which.ErrorCode.Should().Be((int)DomainErrorCodes.CourseInvalidData);
+            _mockRepository.Verify(mock => mock.AddAsync(It.IsAny<Course>()), Times.Never);
         }
 
         [Fact]
-        public void Execute_With_CourseStartDateDefault_Throws_CourseInvalidDataException()
+        public async Task Execute_With_CourseStartDateDefault_Throws_CourseInvalidDataException()
         {
             // Arrange
             DateTime startDate = default;
@@ -48,15 +48,15 @@ namespace AcmeSchool.UnitTests.Application.UseCases
             var courseCommand = new RegisterCourseCommand(courseName, 999, startDate, startDate.AddMonths(3));
 
             // Act
-            Action result = () => _useCase.Execute(courseCommand);
+            Func<Task> result = async () => await _useCase.ExecuteAsync(courseCommand);
 
             // Assert            
-            result.Should().Throw<CourseInvalidDataException>().Which.ErrorCode.Should().Be((int)DomainErrorCodes.CourseInvalidData);
-            _mockRepository.Verify(mock => mock.Add(It.IsAny<Course>()), Times.Never);
+            (await result.Should().ThrowAsync<CourseInvalidDataException>()).Which.ErrorCode.Should().Be((int)DomainErrorCodes.CourseInvalidData);
+            _mockRepository.Verify(mock => mock.AddAsync(It.IsAny<Course>()), Times.Never);
         }
 
         [Fact]
-        public void Execute_With_CourseEndDateDefault_Throws_CourseInvalidDataException()
+        public async Task Execute_With_CourseEndDateDefault_Throws_CourseInvalidDataException()
         {
             // Arrange
             DateTime endDate = default;
@@ -64,15 +64,15 @@ namespace AcmeSchool.UnitTests.Application.UseCases
             var courseCommand = new RegisterCourseCommand(courseName, 999, DateTime.Now, endDate);
 
             // Act
-            Action result = () => _useCase.Execute(courseCommand);
+            Func<Task> result = async () => await _useCase.ExecuteAsync(courseCommand);
 
             // Assert            
-            result.Should().Throw<CourseInvalidDataException>().Which.ErrorCode.Should().Be((int)DomainErrorCodes.CourseInvalidData);
-            _mockRepository.Verify(mock => mock.Add(It.IsAny<Course>()), Times.Never);
+            (await result.Should().ThrowAsync<CourseInvalidDataException>()).Which.ErrorCode.Should().Be((int)DomainErrorCodes.CourseInvalidData);
+            _mockRepository.Verify(mock => mock.AddAsync(It.IsAny<Course>()), Times.Never);
         }
 
         [Fact]
-        public void Execute_With_CourseStartDateGreaterThanEndDate_Throws_CourseInvalidDataException()
+        public async Task Execute_With_CourseStartDateGreaterThanEndDate_Throws_CourseInvalidDataException()
         {
             // Arrange
             DateTime endDate = DateTime.Now.AddMonths(3);
@@ -81,15 +81,15 @@ namespace AcmeSchool.UnitTests.Application.UseCases
             var courseCommand = new RegisterCourseCommand(courseName, 999, startDate, endDate);
 
             // Act
-            Action result = () => _useCase.Execute(courseCommand);
+            Func<Task> result = async () => await _useCase.ExecuteAsync(courseCommand);
 
             // Assert            
-            result.Should().Throw<CourseInvalidDataException>().Which.ErrorCode.Should().Be((int)DomainErrorCodes.CourseInvalidData);
-            _mockRepository.Verify(mock => mock.Add(It.IsAny<Course>()), Times.Never);
+            (await result.Should().ThrowAsync<CourseInvalidDataException>()).Which.ErrorCode.Should().Be((int)DomainErrorCodes.CourseInvalidData);
+            _mockRepository.Verify(mock => mock.AddAsync(It.IsAny<Course>()), Times.Never);
         }
 
         [Fact]
-        public void Execute_With_CourseStartDatePreviousCurrentDate_Throws_CourseInvalidDataException()
+        public async Task Execute_With_CourseStartDatePreviousCurrentDate_Throws_CourseInvalidDataException()
         {
             // Arrange
             var startDate = DateTime.Now.AddDays(-1);
@@ -97,28 +97,28 @@ namespace AcmeSchool.UnitTests.Application.UseCases
             var courseCommand = new RegisterCourseCommand(courseName, 999, startDate, startDate.AddMonths(3));
 
             // Act
-            Action result = () => _useCase.Execute(courseCommand);
+            Func<Task> result = async () => await _useCase.ExecuteAsync(courseCommand);
 
             // Assert            
-            result.Should().Throw<CourseInvalidDataException>().Which.ErrorCode.Should().Be((int)DomainErrorCodes.CourseInvalidData);
-            _mockRepository.Verify(mock => mock.Add(It.IsAny<Course>()), Times.Never);
+            (await result.Should().ThrowAsync<CourseInvalidDataException>()).Which.ErrorCode.Should().Be((int)DomainErrorCodes.CourseInvalidData);
+            _mockRepository.Verify(mock => mock.AddAsync(It.IsAny<Course>()), Times.Never);
         }
 
         [Fact]
-        public void Execute_With_CourseMeetsRequeriment_Then_AddsCourse()
+        public async Task Execute_With_CourseMeetsRequeriment_Then_AddsCourse()
         {
             // Arrange
             var startDate = DateTime.Now.Date.AddDays(1);
             var courseName = _fixture.Create<string>();
             var courseCommand = new RegisterCourseCommand(courseName, 999, startDate, startDate.AddMonths(3));
 
-            _mockRepository.Setup(mock => mock.GetByNameOrDefault(courseCommand.Name)).Returns((Course?)null);
+            _mockRepository.Setup(mock => mock.GetByNameOrDefaultAsync(courseCommand.Name)).ReturnsAsync((Course?)null);
 
             // Act
-            _useCase.Execute(courseCommand);
+            await _useCase.ExecuteAsync(courseCommand);
 
             // Assert
-            _mockRepository.Verify(mock => mock.Add(It.Is<Course>(x =>
+            _mockRepository.Verify(mock => mock.AddAsync(It.Is<Course>(x =>
                 x.Name == courseCommand.Name &&
                 x.RegistrationFee == courseCommand.RegistrationFee &&
                 x.StartDate == courseCommand.StartDate &&
@@ -127,7 +127,7 @@ namespace AcmeSchool.UnitTests.Application.UseCases
         }
 
         [Fact]
-        public void Execute_With_CourseThatAlreadyExists_Throws_CourseAlreadyExistsException()
+        public async Task Execute_With_CourseThatAlreadyExists_Throws_CourseAlreadyExistsException()
         {
             // Arrange
             var courseName = _fixture.Create<string>();
@@ -135,32 +135,32 @@ namespace AcmeSchool.UnitTests.Application.UseCases
             var courseCommand = new RegisterCourseCommand(courseName, 999, startDate, startDate.AddDays(15));
 
             var courseExistent =  new Course(courseName, 678, startDate.AddDays(-10), startDate);
-            _mockRepository.Setup(repo => repo.GetByNameOrDefault(courseCommand.Name)).Returns(courseExistent);
+            _mockRepository.Setup(repo => repo.GetByNameOrDefaultAsync(courseCommand.Name)).ReturnsAsync(courseExistent);
 
             // Act
-            Action result = () => _useCase.Execute(courseCommand);
+            Func<Task> result = async () => await _useCase.ExecuteAsync(courseCommand);
 
             // Assert
-            result.Should().Throw<CourseAlreadyExistsException>().Which.ErrorCode.Should().Be((int)DomainErrorCodes.CourseAlreadyExists);
-            _mockRepository.Verify(mock => mock.Add(It.IsAny<Course>()), Times.Never);
+            (await result.Should().ThrowAsync<CourseAlreadyExistsException>()).Which.ErrorCode.Should().Be((int)DomainErrorCodes.CourseAlreadyExists);
+            _mockRepository.Verify(mock => mock.AddAsync(It.IsAny<Course>()), Times.Never);
         }
 
         [Theory]
         [InlineData(null)]
         [InlineData("")]
         [InlineData(" ")]
-        public void Execute_With_CourseNameEmpty_Throws_CourseInvalidDataException(string courseName)
+        public async Task Execute_With_CourseNameEmpty_Throws_CourseInvalidDataException(string courseName)
         {
             // Arrange
             var startDate = DateTime.Now;
             var courseCommand = new RegisterCourseCommand(courseName, 100, startDate, startDate.AddMonths(3));
 
             // Act
-            Action result = () => _useCase.Execute(courseCommand);
+            Func<Task> result = async () => await _useCase.ExecuteAsync(courseCommand);
 
             // Assert
-            result.Should().Throw<CourseInvalidDataException>().Which.ErrorCode.Should().Be((int)DomainErrorCodes.CourseInvalidData);
-            _mockRepository.Verify(mock => mock.Add(It.IsAny<Course>()), Times.Never);
+            (await result.Should().ThrowAsync<CourseInvalidDataException>()).Which.ErrorCode.Should().Be((int)DomainErrorCodes.CourseInvalidData);
+            _mockRepository.Verify(mock => mock.AddAsync(It.IsAny<Course>()), Times.Never);
         }
     }
 }
