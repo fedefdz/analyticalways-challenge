@@ -1,7 +1,4 @@
-﻿using AcmeSchool.Application.UseCases.EnrollStudentInCourse;
-using AcmeSchool.Application.UseCases.PayRegistrationFeeCourse;
-using AcmeSchool.Application.UseCases.RegisterStudent;
-using AcmeSchool.Domain.Entities;
+﻿using AcmeSchool.Domain.Entities;
 using AcmeSchool.Domain.Exceptions;
 using AcmeSchool.Domain.Repositories;
 
@@ -9,38 +6,40 @@ namespace AcmeSchool.Application.UseCases.ContractCourse
 {
     public interface IContractCourseUseCase
     {
-        public Task ExcecuteAsync(ContractCourseCommand command);
+        public Task<CourseRegitrationFeePayment> ExcecuteAsync(ContractCourseCommand command);
     }
 
     public class ContractCourseUseCase : IContractCourseUseCase
     { 
-        private readonly IPayRegistrationFeeUseCase _payRegistrationFeeUseCase;
-        private readonly IEnrollStudentInCourseUseCase _enrollStudentInCourseUseCase;
         private readonly IStudentRepository _studentRepository;
         private readonly ICourseRepository _courseRepository;
+        private readonly IPaymentRepository _paymentRepository;
 
-        public ContractCourseUseCase(
-            IPayRegistrationFeeUseCase payRegistrationFeeUseCase, IEnrollStudentInCourseUseCase enrollStudentInCourseUseCase,
-            IStudentRepository studentRepository, ICourseRepository courseRepository)
+        public ContractCourseUseCase(IStudentRepository studentRepository, ICourseRepository courseRepository, IPaymentRepository paymentRepository)
         {
-            _payRegistrationFeeUseCase = payRegistrationFeeUseCase ?? throw new ArgumentNullException(nameof(payRegistrationFeeUseCase));
-            _enrollStudentInCourseUseCase = enrollStudentInCourseUseCase ?? throw new ArgumentNullException(nameof(enrollStudentInCourseUseCase));
             _studentRepository = studentRepository ?? throw new ArgumentNullException(nameof(studentRepository));
             _courseRepository = courseRepository ?? throw new ArgumentNullException(nameof(courseRepository));
+            _paymentRepository = paymentRepository ?? throw new ArgumentNullException(nameof(paymentRepository));
         }
 
-        public async Task ExcecuteAsync(ContractCourseCommand command)
+        public async Task<CourseRegitrationFeePayment> ExcecuteAsync(ContractCourseCommand command)
         {
             command.ValidateIfFailThrow();
 
-            
+            Course course = _courseRepository.GetByIdOrDefault(command.CourseId)
+                ?? throw new CourseNotFoundException();
 
-            await _payRegistrationFeeUseCase.ExecuteAsync(new PayRegistrationFeeCourseCommand(command.CourseId, command.StudentId, command.RegistrationFeePaymentRequest));
+            Student student = _studentRepository.GetByIdOrDefault(command.StudentId)
+                ?? throw new StudentNotFoundException();
 
-            await _enrollStudentInCourseUseCase.ExecuteAsync(new EnrollStudentInCourseCommand(command.CourseId, command.StudentId));
-        }
+            if (course.IsStudentEnrolled(student)) throw new OperationNotAllowedException("student already enrolled in course.");
+            if (course.HasStudentRegitrationFeePaid(student)) throw new OperationNotAllowedException("student already paid registration fee.");
 
-        
+            var payment = new CourseRegitrationFeePayment(course.Id, student.Id, course.RegistrationFee, command.paymentMethod);
+            await _paymentRepository.AddCourseRegistrationFeePayementAsync(payment);
+
+            return payment;
+        }        
     }
 
 

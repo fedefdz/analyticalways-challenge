@@ -31,10 +31,14 @@ namespace AcmeSchool.Application.UseCases.PayRegistrationFeeCourse
                 ?? throw new StudentNotFoundException();
 
 
+            //PaymentRegistrationFee p =  course.EmitPayRegistrationFee(student, command.RegistrationFeePaymentRequest.Amount);
+            
+            
+            
             if (command.RegistrationFeePaymentRequest.Amount < course.RegistrationFee)
                 throw new PaymentAmountInsufficientException();
 
-
+            
         }
     }
 }

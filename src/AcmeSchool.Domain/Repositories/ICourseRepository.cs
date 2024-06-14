@@ -7,5 +7,6 @@ namespace AcmeSchool.Domain.Repositories
         void Add(Course course);
         Course? GetByNameOrDefault(string name);
         Course? GetByIdOrDefault(Guid id);
+        void Update(Course course);
     }
 }
