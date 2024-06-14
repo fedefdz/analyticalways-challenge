@@ -8,5 +8,6 @@ namespace AcmeSchool.Domain.Repositories
         Task<Course?> GetByNameOrDefaultAsync(string name);
         Task<Course?> GetByIdOrDefaultAsync(Guid id);
         Task UpdateAsync(Course course);
+        Task<IEnumerable<Course>> GetAllBetweenRangeDatesAsync(DateTime fromDate, DateTime endDate);
     }
 }
