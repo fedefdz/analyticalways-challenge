@@ -6,5 +6,6 @@ namespace AcmeSchool.Domain.Repositories
     {
         void Add(Student student);
         Student? GetByNameOrDefault(string name);
+        Student? GetByIdOrDefault(Guid id);
     }
 }

@@ -2,11 +2,16 @@
 {
     public enum DomainErrorCodes
     {
-        StudentAlreadyExists = 1001,
-        StudentInvalidData = 1002,
-        StudentAgeInsuffcient = 1003,
+        StudentNotFound = 1001,
+        StudentAlreadyExists = 1002,
+        StudentInvalidData = 1003,
+        StudentAgeInsuffcient = 1004,
 
-        CourseAlreadyExists = 2001,
-        CourseInvalidData = 2002
+        CourseNotFound = 2001,
+        CourseAlreadyExists = 2002,
+        CourseInvalidData = 2003,
+
+        PaymentInvalidData = 3003,
+        PaymentAmountInsufficient = 3004
     }
 }

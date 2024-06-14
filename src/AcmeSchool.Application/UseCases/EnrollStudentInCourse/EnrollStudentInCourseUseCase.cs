@@ -1,8 +1,13 @@
 ﻿namespace AcmeSchool.Application.UseCases.EnrollStudentInCourse
 {
-    public class EnrollStudentInCourseUseCase
+    public interface IEnrollStudentInCourseUseCase
     {
-        public void Execute(EnrollStudentInCourseCommand command)
+        Task ExecuteAsync(EnrollStudentInCourseCommand command);
+    }
+
+    public class EnrollStudentInCourseUseCase : IEnrollStudentInCourseUseCase
+    {
+        public async Task ExecuteAsync(EnrollStudentInCourseCommand command)
         {
             command.ValidateIfFailThrow();
         }

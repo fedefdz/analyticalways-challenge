@@ -3,12 +3,12 @@ using AcmeSchool.Domain.Exceptions;
 
 namespace AcmeSchool.Application.UseCases.EnrollStudentInCourse
 {
-    public record class EnrollStudentInCourseCommand(string CourseName, string StudentName) : UseCaseCommand
+    public record class EnrollStudentInCourseCommand(Guid CourseId, Guid StudentId) : UseCaseCommand
     {
         public override void ValidateIfFailThrow()
         {
-            if (string.IsNullOrWhiteSpace(CourseName)) throw new CourseInvalidDataException(nameof(CourseName), "could not be empty.");
-            if (string.IsNullOrWhiteSpace(StudentName)) throw new StudentInvalidDataException(nameof(StudentName), "could not be empty.");
+            if (CourseId == Guid.Empty) throw new CourseInvalidDataException(nameof(CourseId), "could not be empty.");
+            if (StudentId == Guid.Empty) throw new StudentInvalidDataException(nameof(StudentId), "could not be empty.");
         }
     }
 }

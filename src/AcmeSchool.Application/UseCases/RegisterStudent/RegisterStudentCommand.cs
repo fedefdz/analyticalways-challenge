@@ -11,7 +11,7 @@ namespace AcmeSchool.Application.UseCases.RegisterStudent
             var student = new Student(Name, BirthDate);
             
             var age = student.GetAge();
-            if (age < RegisterStudentUseCase.MinimumAgeToBeAdult) throw new StudentAgeInsuffcientException();
+            if (age < RegisterStudentUseCase.MinimumAgeToBeAdult) throw new StudentAgeInsuffiicientException();
         }
     }
 }

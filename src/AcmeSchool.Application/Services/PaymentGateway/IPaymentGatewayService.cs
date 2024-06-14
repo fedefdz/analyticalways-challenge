@@ -1,7 +1,9 @@
-﻿namespace AcmeSchool.Application.Services.PaymentGateway
+﻿using AcmeSchool.Application.Services.PaymentGateway.DTO;
+
+namespace AcmeSchool.Application.Services.PaymentGateway
 {
-    public interface IPaymentGatewayService
+    public interface IPaymentGatewayService<TPaymentRequest> where TPaymentRequest : PaymentRequest
     {
-        Task<PaymentResult> ProcessPaymentAsync(PaymentRequest paymentRequest);
+        Task<PaymentResult> ProcessPaymentAsync(TPaymentRequest paymentRequest);
     }
 }

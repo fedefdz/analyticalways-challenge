@@ -1,0 +1,13 @@
+﻿using AcmeSchool.Domain.ValueObjects;
+
+namespace AcmeSchool.Application.Services.PaymentGateway.DTO
+{
+    public abstract record PaymentRequest
+    {
+        public required Guid PaymentTransactionId { get; init; }
+        public required PaymentMethod PaymentMethod { get; init; }
+        public required decimal Amount { get; init; }
+        public required DateTime PaymentDate { get; init; }
+        public string? Description { get; init; }
+    } 
+}

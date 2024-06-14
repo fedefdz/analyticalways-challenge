@@ -33,7 +33,7 @@ namespace AcmeSchool.UnitTests.Application.UseCases.RegisterStudent
             Action result = () => _useCase.Execute(underageStudentCommand);
 
             // Assert            
-            result.Should().Throw<StudentAgeInsuffcientException>().Which.ErrorCode.Should().Be((int)DomainErrorCodes.StudentAgeInsuffcient);
+            result.Should().Throw<StudentAgeInsuffiicientException>().Which.ErrorCode.Should().Be((int)DomainErrorCodes.StudentAgeInsuffcient);
             _mockRepository.Verify(mock => mock.Add(It.IsAny<Student>()), Times.Never);
         }
 
