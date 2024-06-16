@@ -1,5 +1,4 @@
 ﻿using AcmeSchool.Application.Services.PaymentGateway;
-using AcmeSchool.Application.Services.PaymentGateway.DTO;
 using AcmeSchool.Domain.Entities;
 using AcmeSchool.Domain.Exceptions;
 using AcmeSchool.Domain.Repositories;

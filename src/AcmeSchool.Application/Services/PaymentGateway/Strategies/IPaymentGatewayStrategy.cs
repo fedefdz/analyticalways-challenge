@@ -1,6 +1,4 @@
-﻿using AcmeSchool.Application.Services.PaymentGateway.DTO;
-
-namespace AcmeSchool.Application.Services.PaymentGateway
+﻿namespace AcmeSchool.Application.Services.PaymentGateway.Strategies
 {
     public interface IPaymentGatewayStrategy<TPaymentRequest> where TPaymentRequest : PaymentRequest
     {

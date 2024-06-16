@@ -35,7 +35,7 @@ namespace AcmeSchool.Application.UseCases.ContractCourse
             if (course.IsStudentEnrolled(student)) throw new OperationNotAllowedException("student already enrolled in course.");
             if (course.HasStudentRegitrationFeePaid(student)) throw new OperationNotAllowedException("student already paid registration fee.");
 
-            var payment = new CourseRegitrationFeePayment(course.Id, student.Id, course.RegistrationFee, command.paymentMethod);
+            var payment = new CourseRegitrationFeePayment(course.Id, student.Id, course.RegistrationFee, command.PaymentMethod);
             await _paymentRepository.AddCourseRegistrationFeePayementAsync(payment);
 
             return payment;

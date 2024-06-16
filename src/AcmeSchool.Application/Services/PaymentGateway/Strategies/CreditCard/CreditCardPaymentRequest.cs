@@ -1,4 +1,4 @@
-﻿namespace AcmeSchool.Application.Services.PaymentGateway.DTO
+﻿namespace AcmeSchool.Application.Services.PaymentGateway.Strategies.CreditCard
 {
     public record CreditCardPaymentRequest : PaymentRequest
     {

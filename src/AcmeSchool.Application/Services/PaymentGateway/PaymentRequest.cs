@@ -1,6 +1,6 @@
 ﻿using AcmeSchool.Domain.ValueObjects;
 
-namespace AcmeSchool.Application.Services.PaymentGateway.DTO
+namespace AcmeSchool.Application.Services.PaymentGateway
 {
     public abstract record PaymentRequest
     {

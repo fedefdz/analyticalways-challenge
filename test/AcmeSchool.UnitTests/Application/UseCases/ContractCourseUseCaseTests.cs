@@ -26,7 +26,7 @@ namespace AcmeSchool.UnitTests.Application.UseCases
             // Arrange
             var course = new Course("Test Course", 100m, DateTime.Today, DateTime.Today.AddDays(30));
             var student = new Student("Test Student", DateTime.Now.AddYears(-20));
-            var command = new ContractCourseCommand(course.Id, student.Id, paymentMethod: PaymentMethod.CreditCard);
+            var command = new ContractCourseCommand(course.Id, student.Id, PaymentMethod: PaymentMethod.CreditCard);
 
 
             _courseRepositoryMock.Setup(repo => repo.GetByIdOrDefaultAsync(command.CourseId)).ReturnsAsync(course);
@@ -48,7 +48,7 @@ namespace AcmeSchool.UnitTests.Application.UseCases
         public async Task ExcecuteAsync_WithNonexistentCourse_ThrowsCourseNotFoundException()
         {
             // Arrange
-            var command = new ContractCourseCommand(CourseId: Guid.NewGuid(), StudentId: Guid.NewGuid(), paymentMethod: PaymentMethod.CreditCard);
+            var command = new ContractCourseCommand(CourseId: Guid.NewGuid(), StudentId: Guid.NewGuid(), PaymentMethod: PaymentMethod.CreditCard);
 
             _courseRepositoryMock.Setup(repo => repo.GetByIdOrDefaultAsync(command.CourseId)).ReturnsAsync((Course?)null);
 

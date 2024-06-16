@@ -117,8 +117,8 @@ namespace AcmeSchool.UnitTests.Domain.Entities
             var payment = new ResgitrationFeePayment(Guid.NewGuid(), studentId, 100m, DateTime.Today, PaymentMethod.CreditCard);
             // Utilizando reflexión para agregar el pago a la lista privada, ya que no hay un método público disponible
             var paymentsField = course.GetType().GetProperty(nameof(Course.RegistrationFeePayments));
-            var paymentsList = (List<ResgitrationFeePayment>)paymentsField.GetValue(course);
-            paymentsList.Add(payment);
+            var paymentsList = (List<ResgitrationFeePayment>)paymentsField!.GetValue(course)!;
+            paymentsList!.Add(payment);
             paymentsField.SetValue(course, paymentsList);
             return course;
         }

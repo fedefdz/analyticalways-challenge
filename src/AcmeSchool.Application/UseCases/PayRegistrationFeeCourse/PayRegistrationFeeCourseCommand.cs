@@ -1,4 +1,4 @@
-﻿using AcmeSchool.Application.Services.PaymentGateway.DTO;
+﻿using AcmeSchool.Application.Services.PaymentGateway;
 using AcmeSchool.Application.UseCases.Common;
 using AcmeSchool.Domain.Exceptions;
 

@@ -1,4 +1,4 @@
-﻿namespace AcmeSchool.Application.Services.PaymentGateway.DTO
+﻿namespace AcmeSchool.Application.Services.PaymentGateway
 {
     public record PaymentResult(bool Success, string Message, string ResultCode, string ApprovationCode, string OperationNumber)
     {
