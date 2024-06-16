@@ -6,7 +6,7 @@ namespace AcmeSchool.Application.UseCases.ContractCourse
 {
     public interface IContractCourseUseCase
     {
-        public Task<CourseRegitrationFeePayment> ExcecuteAsync(ContractCourseCommand command);
+        public Task<CourseRegistrationFeePayment> ExcecuteAsync(ContractCourseCommand command);
     }
 
     public class ContractCourseUseCase : IContractCourseUseCase
@@ -22,7 +22,7 @@ namespace AcmeSchool.Application.UseCases.ContractCourse
             _paymentRepository = paymentRepository ?? throw new ArgumentNullException(nameof(paymentRepository));
         }
 
-        public async Task<CourseRegitrationFeePayment> ExcecuteAsync(ContractCourseCommand command)
+        public async Task<CourseRegistrationFeePayment> ExcecuteAsync(ContractCourseCommand command)
         {
             command.ValidateIfFailThrow();
 
@@ -35,8 +35,8 @@ namespace AcmeSchool.Application.UseCases.ContractCourse
             if (course.IsStudentEnrolled(student)) throw new OperationNotAllowedException("student already enrolled in course.");
             if (course.HasStudentRegitrationFeePaid(student)) throw new OperationNotAllowedException("student already paid registration fee.");
 
-            var payment = new CourseRegitrationFeePayment(course.Id, student.Id, course.RegistrationFee, command.PaymentMethod);
-            await _paymentRepository.AddCourseRegistrationFeePayementAsync(payment);
+            var payment = new CourseRegistrationFeePayment(course.Id, student.Id, course.RegistrationFee, command.PaymentMethod);
+            await _paymentRepository.AddCourseRegistrationFeePaymentAsync(payment);
 
             return payment;
         }        

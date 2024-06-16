@@ -4,8 +4,8 @@ namespace AcmeSchool.Domain.Repositories
 {
     public interface IPaymentRepository
     {
-        Task AddCourseRegistrationFeePayementAsync(CourseRegitrationFeePayment courseRegitrationFeePayment);
-        Task<CourseRegitrationFeePayment> GetCourseRegistrationFeePaymentByIdOrDefaultAsync(Guid id);
-        Task UpdateCourseRegistrationFeePaymentAsync(CourseRegitrationFeePayment courseRegitrationFeePayment);
+        Task AddCourseRegistrationFeePaymentAsync(CourseRegistrationFeePayment courseRegitrationFeePayment);
+        Task<CourseRegistrationFeePayment> GetCourseRegistrationFeePaymentByIdOrDefaultAsync(Guid id);
+        Task UpdateCourseRegistrationFeePaymentAsync(CourseRegistrationFeePayment courseRegitrationFeePayment);
     }
 }

@@ -3,9 +3,9 @@ using AcmeSchool.Domain.ValueObjects;
 
 namespace AcmeSchool.Domain.Entities
 {
-    public class CourseRegitrationFeePayment
+    public class CourseRegistrationFeePayment
     {
-        public CourseRegitrationFeePayment(Guid courseId, Guid studentId, decimal amount, PaymentMethod paymentMethod)
+        public CourseRegistrationFeePayment(Guid courseId, Guid studentId, decimal amount, PaymentMethod paymentMethod)
         {
             PaymentId = Guid.NewGuid();
             CourseId = courseId;

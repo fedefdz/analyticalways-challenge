@@ -58,7 +58,7 @@ namespace AcmeSchool.UnitTests.Domain.Entities
         {
             // Arrange
             var course = new Course("Test Course", 100m, DateTime.Today, DateTime.Today.AddDays(30));
-            var payment = new CourseRegitrationFeePayment(course.Id, Guid.NewGuid(), 100, PaymentMethod.CreditCard);
+            var payment = new CourseRegistrationFeePayment(course.Id, Guid.NewGuid(), 100, PaymentMethod.CreditCard);
             payment.Approbe(Guid.NewGuid().ToString());
 
             // Act
@@ -74,7 +74,7 @@ namespace AcmeSchool.UnitTests.Domain.Entities
             // Arrange
             var course = new Course("Test Course", 100m, DateTime.Today, DateTime.Today.AddDays(30));
             var otherCourse = Guid.NewGuid();
-            var payment = new CourseRegitrationFeePayment(otherCourse, Guid.NewGuid(), 100, PaymentMethod.CreditCard); ;
+            var payment = new CourseRegistrationFeePayment(otherCourse, Guid.NewGuid(), 100, PaymentMethod.CreditCard); ;
 
             // Act
             Action act = () => course.PayRegistrationFee(payment);
@@ -88,7 +88,7 @@ namespace AcmeSchool.UnitTests.Domain.Entities
         {
             // Arrange
             var course = new Course("Test Course", 100m, DateTime.Today, DateTime.Today.AddDays(30));
-            var payment = new CourseRegitrationFeePayment(course.Id, Guid.NewGuid(), course.RegistrationFee-1, PaymentMethod.CreditCard);
+            var payment = new CourseRegistrationFeePayment(course.Id, Guid.NewGuid(), course.RegistrationFee-1, PaymentMethod.CreditCard);
 
             // Act
             Action act = () => course.PayRegistrationFee(payment);
@@ -102,7 +102,7 @@ namespace AcmeSchool.UnitTests.Domain.Entities
         {
             // Arrange
             var course = new Course("Test Course", 100m, DateTime.Today, DateTime.Today.AddDays(30));
-            var payment = new CourseRegitrationFeePayment(course.Id, Guid.NewGuid(), 100, PaymentMethod.CreditCard);
+            var payment = new CourseRegistrationFeePayment(course.Id, Guid.NewGuid(), 100, PaymentMethod.CreditCard);
 
             // Act
             Action act = () => course.PayRegistrationFee(payment);

@@ -8,7 +8,7 @@ namespace AcmeSchool.Application.UseCases.PayRegistrationFeeCourse
 {
     public interface IPayRegistrationFeeUseCase
     {
-        Task<CourseRegitrationFeePayment> ExecuteAsync(PayRegistrationFeeCourseCommand command);
+        Task<CourseRegistrationFeePayment> ExecuteAsync(PayRegistrationFeeCourseCommand command);
     }
 
     public class PayRegistrationFeeCourseUseCase : IPayRegistrationFeeUseCase
@@ -26,7 +26,7 @@ namespace AcmeSchool.Application.UseCases.PayRegistrationFeeCourse
             _paymentGateway = paymentGateway ?? throw new ArgumentNullException(nameof(paymentGateway));
         }
 
-        public async Task<CourseRegitrationFeePayment> ExecuteAsync(PayRegistrationFeeCourseCommand command)
+        public async Task<CourseRegistrationFeePayment> ExecuteAsync(PayRegistrationFeeCourseCommand command)
         {
             command.ValidateIfFailThrow();
 
@@ -36,7 +36,7 @@ namespace AcmeSchool.Application.UseCases.PayRegistrationFeeCourse
             Student student = await _studentRepository.GetByIdOrDefaultAsync(command.StudentId)
                 ?? throw new StudentNotFoundException();
 
-            CourseRegitrationFeePayment registrationFeePayment = await _paymentRepository.GetCourseRegistrationFeePaymentByIdOrDefaultAsync(command.RegistrationFeePaymentRequest.PaymentId)
+            CourseRegistrationFeePayment registrationFeePayment = await _paymentRepository.GetCourseRegistrationFeePaymentByIdOrDefaultAsync(command.RegistrationFeePaymentRequest.PaymentId)
                 ?? throw new CourseRegistrationFeePaymentNotFoundException();
 
             if (command.RegistrationFeePaymentRequest.Amount < course.RegistrationFee)
@@ -61,7 +61,7 @@ namespace AcmeSchool.Application.UseCases.PayRegistrationFeeCourse
             return registrationFeePayment;
         }
 
-        private void ProcessPaymentResult(PaymentResult paymentResult, CourseRegitrationFeePayment registrationFeePayment)
+        private void ProcessPaymentResult(PaymentResult paymentResult, CourseRegistrationFeePayment registrationFeePayment)
         {
             if (paymentResult.Success)
             {

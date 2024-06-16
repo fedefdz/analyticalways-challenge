@@ -43,7 +43,7 @@ namespace AcmeSchool.Domain.Entities
             return RegistrationFeePayments.Any(p => p.StudentId == id);
         }
 
-        public void PayRegistrationFee(CourseRegitrationFeePayment regitrationFeePayment)
+        public void PayRegistrationFee(CourseRegistrationFeePayment regitrationFeePayment)
         {
             if (regitrationFeePayment.CourseId != Id) throw new OperationNotAllowedException("payment is not for this course");
             if (regitrationFeePayment.Amount < RegistrationFee) throw new PaymentAmountInsufficientException();
