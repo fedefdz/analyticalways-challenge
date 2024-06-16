@@ -46,5 +46,10 @@ namespace AcmeSchool.Domain.Entities
             if (Status != PaymentStatus.Pending) throw new OperationNotAllowedException("payment is not pending");
             Status = status;
         }
+
+        public static RegistrationFeePayment CreatePendingPayment(Guid courseId, Guid studentId, decimal registrationFee, PaymentMethod paymentMethod)
+        {
+            return new RegistrationFeePayment(courseId, studentId, registrationFee, paymentMethod);
+        }
     }
 }

@@ -10,6 +10,7 @@ namespace AcmeSchool.Application.UseCases.ContractCourse
         {
             if (CourseId == Guid.Empty) throw new CourseInvalidDataException(nameof(CourseId), "could not be empty.");
             if (StudentId == Guid.Empty) throw new StudentInvalidDataException(nameof(StudentId), "could not be empty.");
+            if (!Enum.IsDefined(typeof(PaymentMethod), PaymentMethod)) throw new PaymentInvalidDataException(nameof(PaymentMethod), "is not valid.");
         }
     }
 }
