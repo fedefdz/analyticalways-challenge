@@ -2,7 +2,7 @@
 
 namespace AcmeSchool.Application.Services.PaymentGateway
 {
-    public interface IPaymentGatewayBankTransferService : IPaymentGatewayService<BankTransferPaymentRequest>
+    public interface IPaymentGatewayDebitCardStrategy : IPaymentGatewayStrategy<DebitCardPaymentRequest>
     {
     }
 }

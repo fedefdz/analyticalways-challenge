@@ -2,8 +2,7 @@
 
 namespace AcmeSchool.Application.Services.PaymentGateway
 {
-    public interface IPaymentGatewayStrategy
+    public interface IPaymentGatewayCreditCardStrategy : IPaymentGatewayStrategy<CreditCardPaymentRequest>
     {
-        Task<PaymentResult> ProcessPaymentAsync(PaymentRequest paymentRequest);
     }
 }

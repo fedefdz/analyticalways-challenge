@@ -17,9 +17,9 @@ namespace AcmeSchool.Application.UseCases.PayRegistrationFeeCourse
         private readonly ICourseRepository _courseRepository;
         private readonly IStudentRepository _studentRepository;
         private readonly IPaymentRepository _paymentRepository;
-        private readonly IPaymentGatewayStrategy _paymentGateway;
+        private readonly IPaymentGatewayService _paymentGateway;
 
-        public PayRegistrationFeeCourseUseCase(ICourseRepository courseRepository, IStudentRepository studentRepository, IPaymentRepository paymentRepository, IPaymentGatewayStrategy paymentGateway)
+        public PayRegistrationFeeCourseUseCase(ICourseRepository courseRepository, IStudentRepository studentRepository, IPaymentRepository paymentRepository, IPaymentGatewayService paymentGateway)
         {
             _courseRepository = courseRepository ?? throw new ArgumentNullException(nameof(courseRepository));
             _studentRepository = studentRepository ?? throw new ArgumentNullException(nameof(studentRepository));

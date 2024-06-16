@@ -2,8 +2,8 @@
 
 namespace AcmeSchool.Application.Services.PaymentGateway
 {
-    public interface IPaymentGatewayService<TPaymentRequest> where TPaymentRequest : PaymentRequest
+    public interface IPaymentGatewayService
     {
-        Task<PaymentResult> ProcessPaymentAsync(TPaymentRequest paymentRequest);
+        Task<PaymentResult> ProcessPaymentAsync(PaymentRequest paymentRequest);
     }
 }
