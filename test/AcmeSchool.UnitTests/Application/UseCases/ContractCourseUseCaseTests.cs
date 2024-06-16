@@ -31,7 +31,7 @@ namespace AcmeSchool.UnitTests.Application.UseCases
 
             _courseRepositoryMock.Setup(repo => repo.GetByIdOrDefaultAsync(command.CourseId)).ReturnsAsync(course);
             _studentRepositoryMock.Setup(repo => repo.GetByIdOrDefaultAsync(command.StudentId)).ReturnsAsync(student);
-            _paymentRepositoryMock.Setup(repo => repo.AddCourseRegistrationFeePaymentAsync(It.IsAny<CourseRegistrationFeePayment>()))
+            _paymentRepositoryMock.Setup(repo => repo.AddCourseRegistrationFeePaymentAsync(It.IsAny<RegistrationFeePayment>()))
                 .Returns(Task.CompletedTask);
 
             // Act
