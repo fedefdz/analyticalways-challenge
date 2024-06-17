@@ -1,9 +1,9 @@
 ﻿namespace AcmeSchool.Application.Services.PaymentGateway
 {
-    public record PaymentResult(bool Success, string Message, string ResultCode, string ApprovationCode, string OperationNumber)
+    public record PaymentResult(Guid PaymentId, bool Success, string Message, string ResultCode, string OperationNumber, string? ApprovationCode)
     {
-        public PaymentResult(string resultCode, string approvationCode, string operationNumber)
-            : this(resultCode == PaymentResultCodes.Success, PaymentResultMessages.GetMessage(resultCode), resultCode, approvationCode, operationNumber)
+        public PaymentResult(Guid paymentId, string resultCode, string operationNumber, string? approvationCode)
+            : this(paymentId, resultCode == PaymentResultCodes.Success, PaymentResultMessages.GetMessage(resultCode), resultCode, operationNumber, approvationCode)
         { }
     }
 }

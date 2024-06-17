@@ -30,53 +30,66 @@ namespace AcmeSchool.Application.UseCases.PayRegistrationFeeCourse
         {
             command.ValidateIfFailThrow();
 
-            Course course = await _courseRepository.GetByIdOrDefaultAsync(command.CourseId)
-                ?? throw new CourseNotFoundException();
+            Course course = await GetCourseOrThrow(command.CourseId);
+            Student student = await GetStudentOrThrow(command.StudentId);
+            RegistrationFeePayment registrationFeePayment = await GetRegistrationFeePaymentOrThrow(command.RegistrationFeePaymentRequest.PaymentId);
 
-            Student student = await _studentRepository.GetByIdOrDefaultAsync(command.StudentId)
-                ?? throw new StudentNotFoundException();
+            ValidatePaymentConditions(command.RegistrationFeePaymentRequest, course, student, registrationFeePayment);
+            
+            PaymentResult paymentResult = await _paymentGateway.ProcessPaymentAsync(command.RegistrationFeePaymentRequest);
+            
+            await ProcessPaymentResult(paymentResult, registrationFeePayment);
+            
+            if (registrationFeePayment.Status == PaymentStatus.Approved)
+            {
+                await ConfirmRegistrationFeePayment(course, registrationFeePayment);                
+            }
 
-            RegistrationFeePayment registrationFeePayment = await _paymentRepository.GetCourseRegistrationFeePaymentByIdOrDefaultAsync(command.RegistrationFeePaymentRequest.PaymentId)
-                ?? throw new CourseRegistrationFeePaymentNotFoundException();
+            
+            return registrationFeePayment;
+        }
 
-            if (command.RegistrationFeePaymentRequest.Amount < course.RegistrationFee)
+        private async Task ProcessPaymentResult(PaymentResult paymentResult, RegistrationFeePayment registrationFeePayment)
+        {
+            switch (paymentResult.ResultCode)
+            {
+                case PaymentResultCodes.Success:
+                    registrationFeePayment.Approbe(paymentResult.ApprovationCode);
+                    break;
+                case PaymentResultCodes.InsufficientFunds:
+                    registrationFeePayment.Reject();
+                    break;
+                default:
+                    registrationFeePayment.Fail();
+                    break;
+            }
+
+            await _paymentRepository.UpdateCourseRegistrationFeePaymentAsync(registrationFeePayment);
+        }
+
+        private async Task ConfirmRegistrationFeePayment(Course course, RegistrationFeePayment registrationFeePayment)
+        {
+            course.PayRegistrationFee(registrationFeePayment);
+            await _courseRepository.UpdateAsync(course);
+        }
+
+        private void ValidatePaymentConditions(PaymentRequest paymentRequest, Course course, Student student, RegistrationFeePayment registrationFeePayment)
+        {
+            if (paymentRequest.Amount < course.RegistrationFee)
                 throw new PaymentAmountInsufficientException();
 
             if (registrationFeePayment.Status != PaymentStatus.Pending) throw new OperationNotAllowedException("payment is not pending");
             if (course.Id != registrationFeePayment.CourseId) throw new OperationNotAllowedException("payment is not for this course");
             if (student.Id != registrationFeePayment.StudentId) throw new OperationNotAllowedException("payment is not for this student");
-
-
-            PaymentResult paymentResult = await _paymentGateway.ProcessPaymentAsync(command.RegistrationFeePaymentRequest);
-            
-            ProcessPaymentResult(paymentResult, registrationFeePayment);
-            
-            if (registrationFeePayment.Status == PaymentStatus.Approved)
-            {
-                course.PayRegistrationFee(registrationFeePayment);
-                await _courseRepository.UpdateAsync(course);
-            }
-
-            await _paymentRepository.UpdateCourseRegistrationFeePaymentAsync(registrationFeePayment);
-            return registrationFeePayment;
         }
 
-        private void ProcessPaymentResult(PaymentResult paymentResult, RegistrationFeePayment registrationFeePayment)
-        {
-            if (paymentResult.Success)
-            {
-                registrationFeePayment.Approbe(paymentResult.ApprovationCode);
-                return;
-            }
+        private async Task<Course> GetCourseOrThrow(Guid courseId) 
+            => await _courseRepository.GetByIdOrDefaultAsync(courseId) ?? throw new CourseNotFoundException();
 
-            if (paymentResult.ResultCode == PaymentResultCodes.InsufficientFunds)
-            {
-                registrationFeePayment.Reject();
-            }
-            else
-            {
-                registrationFeePayment.Fail();
-            }
-        }
+        private async Task<Student> GetStudentOrThrow(Guid studentId) 
+            => await _studentRepository.GetByIdOrDefaultAsync(studentId) ?? throw new StudentNotFoundException();
+
+        private async Task<RegistrationFeePayment> GetRegistrationFeePaymentOrThrow(Guid paymentId) 
+            => await _paymentRepository.GetCourseRegistrationFeePaymentByIdOrDefaultAsync(paymentId) ?? throw new CourseRegistrationFeePaymentNotFoundException();
     }
 }

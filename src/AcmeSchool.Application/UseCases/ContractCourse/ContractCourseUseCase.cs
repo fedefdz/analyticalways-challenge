@@ -26,11 +26,8 @@ namespace AcmeSchool.Application.UseCases.ContractCourse
         {
             command.ValidateIfFailThrow();
 
-            Course course = await _courseRepository.GetByIdOrDefaultAsync(command.CourseId)
-                ?? throw new CourseNotFoundException();
-
-            Student student = await _studentRepository.GetByIdOrDefaultAsync(command.StudentId)
-                ?? throw new StudentNotFoundException();
+            Course course = await GetCourseOrThrow(command.CourseId);
+            Student student = await GetStudentOrThrow(command.StudentId);
 
             if (course.IsStudentEnrolled(student)) throw new OperationNotAllowedException("student already enrolled in course.");
             if (course.HasStudentRegitrationFeePaid(student)) throw new OperationNotAllowedException("student already paid registration fee.");
@@ -39,6 +36,10 @@ namespace AcmeSchool.Application.UseCases.ContractCourse
             await _paymentRepository.AddCourseRegistrationFeePaymentAsync(payment);
 
             return payment;
-        }        
+        }
+
+        private async Task<Course> GetCourseOrThrow(Guid courseId) => await _courseRepository.GetByIdOrDefaultAsync(courseId) ?? throw new CourseNotFoundException();
+
+        private async Task<Student> GetStudentOrThrow(Guid studentId) => await _studentRepository.GetByIdOrDefaultAsync(studentId) ?? throw new StudentNotFoundException();
     }
 }
