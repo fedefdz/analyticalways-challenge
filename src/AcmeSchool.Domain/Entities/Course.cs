@@ -10,7 +10,7 @@ namespace AcmeSchool.Domain.Entities
         public decimal RegistrationFee { get; private set; }
         public DateTime StartDate{ get; private set; }
         public DateTime EndDate { get; private set; }
-        public IList<ResgitrationFeePaid> RegistrationFeePayments { get; private set; }
+        public IList<RegistrationFeePaid> RegistrationFeePayments { get; private set; }
         public IList<Enrollment> Enrollments { get; private set; }
 
 
@@ -49,7 +49,7 @@ namespace AcmeSchool.Domain.Entities
             if (regitrationFeePayment.Amount < RegistrationFee) throw new PaymentAmountInsufficientException();
             if (regitrationFeePayment.Status != PaymentStatus.Approved) throw new OperationNotAllowedException("payment is not approved");
 
-            var payment = new ResgitrationFeePaid(regitrationFeePayment.PaymentId, regitrationFeePayment.StudentId, regitrationFeePayment.Amount, regitrationFeePayment.PaymentDate!.Value, regitrationFeePayment.PaymentMethod);
+            var payment = new RegistrationFeePaid(regitrationFeePayment.PaymentId, regitrationFeePayment.StudentId, regitrationFeePayment.Amount, regitrationFeePayment.PaymentDate!.Value, regitrationFeePayment.PaymentMethod);
             RegistrationFeePayments.Add(payment);
         }
 

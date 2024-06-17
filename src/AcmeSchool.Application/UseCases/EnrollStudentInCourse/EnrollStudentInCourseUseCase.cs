@@ -1,6 +1,8 @@
 ﻿using AcmeSchool.Domain.Entities;
 using AcmeSchool.Domain.Exceptions;
 using AcmeSchool.Domain.Repositories;
+using AcmeSchool.Domain.ValueObjects;
+using System.Xml.Linq;
 
 namespace AcmeSchool.Application.UseCases.EnrollStudentInCourse
 {
@@ -25,15 +27,18 @@ namespace AcmeSchool.Application.UseCases.EnrollStudentInCourse
         {
             command.ValidateIfFailThrow();
 
-            Course course = await _courseRepository.GetByIdOrDefaultAsync(command.CourseId)
-                ?? throw new CourseNotFoundException();
-
-            Student student = await _studentRepository.GetByIdOrDefaultAsync(command.StudentId)
-                ?? throw new StudentNotFoundException();
-
+            Course course = await GetCourseOrThrow(command.CourseId);
+            Student student = await GetStudentOrThrow(command.StudentId);
+            
             course.EnrollStudent(student);
 
             await _courseRepository.UpdateAsync(course);
         }
+
+        private async Task<Course> GetCourseOrThrow(Guid courseId)
+            => await _courseRepository.GetByIdOrDefaultAsync(courseId) ?? throw new CourseNotFoundException();
+
+        private async Task<Student> GetStudentOrThrow(Guid studentId)
+            => await _studentRepository.GetByIdOrDefaultAsync(studentId) ?? throw new StudentNotFoundException();
     }
 }

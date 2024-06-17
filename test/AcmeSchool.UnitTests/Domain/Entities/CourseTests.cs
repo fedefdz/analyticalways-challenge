@@ -114,10 +114,10 @@ namespace AcmeSchool.UnitTests.Domain.Entities
         private Course CreateCourseWithPaidFee(Guid studentId)
         {
             var course = new Course("Test Course", 100m, DateTime.Today, DateTime.Today.AddDays(30));
-            var payment = new ResgitrationFeePaid(Guid.NewGuid(), studentId, 100m, DateTime.Today, PaymentMethod.CreditCard);
+            var payment = new RegistrationFeePaid(Guid.NewGuid(), studentId, 100m, DateTime.Today, PaymentMethod.CreditCard);
             // Utilizando reflexión para agregar el pago a la lista privada, ya que no hay un método público disponible
             var paymentsField = course.GetType().GetProperty(nameof(Course.RegistrationFeePayments));
-            var paymentsList = (List<ResgitrationFeePaid>)paymentsField!.GetValue(course)!;
+            var paymentsList = (List<RegistrationFeePaid>)paymentsField!.GetValue(course)!;
             paymentsList!.Add(payment);
             paymentsField.SetValue(course, paymentsList);
             return course;

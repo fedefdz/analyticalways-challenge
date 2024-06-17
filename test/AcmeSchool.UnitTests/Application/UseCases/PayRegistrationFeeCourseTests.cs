@@ -212,13 +212,6 @@ namespace AcmeSchool.UnitTests.Application.UseCases
             return student;
         }
 
-        private PaymentRequest CreatePaymentRequestWithId(Guid paymentId)
-        {
-            var paymentRequest = _fixture.Create<PaymentRequest>();
-            SetProperty(paymentRequest, nameof(PaymentRequest.PaymentId), paymentId);
-            return paymentRequest;
-        }
-
         private RegistrationFeePayment CreateRegistrationFeePaymentWithId(Guid paymentId)
         {
             var reagistrationFeePayment = _fixture.Create<RegistrationFeePayment>();
