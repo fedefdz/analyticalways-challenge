@@ -14,6 +14,8 @@ namespace AcmeSchool.Application.UseCases.ListCourses
 
         public async Task<IEnumerable<CourseWithStudentList>> ExecuteAsync(ListCoursesCommand command)
         {
+            command.ValidateIfFailThrow();
+            
             IEnumerable<Course> courses = await _courseRepository.GetAllBetweenRangeDatesAsync(command.FromDate, command.EndDate);
             var result = courses.Select(CourseWithStudentList.FromCourse);
 
