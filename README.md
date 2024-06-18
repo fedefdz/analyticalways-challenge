@@ -8,8 +8,37 @@ Este proyecto es un challenge para Analyticalways, consiste en una `Class Librar
 
 La solución está dividida en las siguientes capas y proyectos:
 
+```
+acme/ 
+├── src/ 
+│   ├── Application/
+│   │   ├── UseCases/
+│   │   │   ├── RegisterCourse/
+│   │   │   ├── RegisterStudent/
+│   │   │   ├── ContracCourse/
+│   │   │   ├── PayRegistrationFeeCourse/
+│   │   │   ├── EnrollStudentInCourse/
+│   │   │   └── ListCourses/
+│   │   └── Services/
+│   │      └── PaymentGateway/
+│   │          └── Strategies/
+│   │               ├── BankTransfer/
+│   │               ├── CreditCard/
+│   │               └── DebitCard/
+│   └── Domain/
+│   │   ├── Entities/
+│   │   ├── ValueObjects/
+│   │   ├── Exceptions/
+│   │   └── Repositories/
+└── test/ 
+    └── UnitTest/
+        ├── Application/
+        └── Domain/        
+```
 - **AcmeSchool.Application**: Contiene la lógica de aplicación, incluyendo casos de uso, servicios y cualquier otra lógica que coordine las acciones entre la capa de presentación y la capa de dominio.
-    
+  - Contract course se divide en 3 use case: *ContractCourseUseCase*, *PayRegistrationFeeCourseUseCase* y *EnrollStudentInCourseUseCase*
+  - Payment gateway se considera un servicio de aplicación porque el domnio solo necesita saber del pago de la tasa no de los gateways. Se definen varias strategies de formas de pago pero la interface principal `IPaymentGatewayService` es simple a alto nivel y la que debe usar el use case.
+
 - **AcmeSchool.Domain**: Contiene las entidades del dominio, excepciones específicas del dominio y las interfaces de los repositorios. Esta capa define las reglas de negocio y los objetos utilizados a lo largo de la aplicación.
 
 - **AcmeSchool.UnitTests**: Contiene las pruebas unitarias para los proyectos de la solución, asegurando que la lógica de negocio y los casos de uso funcionen como se espera.
