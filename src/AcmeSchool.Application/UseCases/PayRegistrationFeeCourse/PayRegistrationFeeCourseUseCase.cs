@@ -57,6 +57,7 @@ namespace AcmeSchool.Application.UseCases.PayRegistrationFeeCourse
                     registrationFeePayment.Approve(paymentResult.ApprovationCode!);
                     break;
                 case PaymentResultCodes.InsufficientFunds:
+                case PaymentResultCodes.InvalidCard:
                     registrationFeePayment.Reject();
                     break;
                 default:

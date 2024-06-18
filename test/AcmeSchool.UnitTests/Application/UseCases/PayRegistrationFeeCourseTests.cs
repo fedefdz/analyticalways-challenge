@@ -54,7 +54,7 @@ namespace AcmeSchool.UnitTests.Application.UseCases
         }
 
         [Fact]
-        public async Task ExecuteAsync_WhenPaymentIsNotPending_ThrowsOperationNotAllowedException()
+        public async Task ExecuteAsync_WhenPaymentIsNotPendingBeforeToPay_ThrowsOperationNotAllowedException()
         {
             // Arrange
             var command = _fixture.Create<PayRegistrationFeeCourseCommand>();
@@ -111,7 +111,7 @@ namespace AcmeSchool.UnitTests.Application.UseCases
 
 
         [Fact]
-        public async Task ExecuteAsync_WhenPaymentResultIsApproved_ThenConfirmRegistrationFeePAyment()
+        public async Task ExecuteAsync_WhenPaymentResultIsApproved_ThenConfirmRegistrationFeeaAyment()
         {
             // Arrange
             var command = _fixture.Create<PayRegistrationFeeCourseCommand>();
@@ -150,7 +150,7 @@ namespace AcmeSchool.UnitTests.Application.UseCases
         public async Task ExecuteAsync_WhenPaymentResultIsNotApproved_ThenShouldNotConfirmRegistrationFeePAyment()
         {
             // Arrange
-            var command = _fixture.Create<PayRegistrationFeeCourseCommand>();
+            var command = _fixture.Create<PayRegistrationFeeCourseCommand>();       
             command = command with { RegistrationFeePaymentRequest = command.RegistrationFeePaymentRequest with { Amount = 500m } };
             Course course = CreateCourseWithId(command.CourseId);
             Setter.SetProperty(course, nameof(Course.RegistrationFee), command.RegistrationFeePaymentRequest.Amount);
