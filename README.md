@@ -24,7 +24,8 @@ Para ejecutar las pruebas, puedes utilizar el comando `dotnet test` en la raíz 
 
 ## Consideraciones
 No se uso MeditR para la capa de Application para no agregar dependencias.
-Se hicieron unit test sobre la class `Course` que tiene lógica encapsulada, me hubiese gustado hacer más sobre payment.
 
-Hay dos interface donde itervienen payments, en el Domain la `IPaymentRepository` que gestiona los los pagos de tasas abstrayendo información de los Gateways ya que eso es de la capa de Application. La interface `IPaymentGatewaySelector` y `IPaymentGateway<>` si dan la posibilidad de gestionar datos necesarion para el pago por Gateways y la posibilidad de escalar con diferentes forma de pago.
+Hay dos interface donde itervienen payments, en el Domain la `IPaymentRepository` que gestiona los los pagos de tasas abstrayendo información de los Gateways ya que eso es de la capa de Application. La interface `IPaymentGatewayService` brinda la posibilidad de gestionar datos necesarion para el pago por Gateways y la posibilidad de escalar con diferentes forma de pago mediante el record abstract `PaymentRequest`.
 
+
+Las class `PaymentGatewayStrategySelector` y `PaymentGatewayStrategyDynamicSelector` permiten escalar con diferentes formas de pago pero no es obligación utilizarlas cuando se implemente `IPaymentGatewayService`
