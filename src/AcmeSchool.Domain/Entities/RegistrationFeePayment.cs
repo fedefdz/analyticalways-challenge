@@ -22,13 +22,15 @@ namespace AcmeSchool.Domain.Entities
         public PaymentMethod PaymentMethod { get; private set; }
         public PaymentStatus Status { get; private set; }
         public DateTime? PaymentDate { get; private set; }
-        public string? ApprobationCode { get; private set; }
+        public string? ApprovationCode { get; private set; }
 
-        public void Approbe(string approbationCode)
+        public void Approve(string approvationCode)
         {            
+            if (string.IsNullOrWhiteSpace(approvationCode)) throw new PaymentInvalidDataException(nameof(approvationCode), "could not be empty");
+            
             ChangeStatus(PaymentStatus.Approved);
-            ApprobationCode = approbationCode;
-            PaymentDate = DateTime.Now;
+            ApprovationCode = approvationCode;
+            PaymentDate = DateTime.UtcNow;
         }
 
         public void Reject()

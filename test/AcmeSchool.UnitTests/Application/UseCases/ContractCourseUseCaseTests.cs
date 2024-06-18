@@ -46,7 +46,7 @@ namespace AcmeSchool.UnitTests.Application.UseCases
             result.Status.Should().Be(PaymentStatus.Pending);
             result.Amount.Should().Be(course.RegistrationFee);
             result.PaymentDate.Should().BeNull();
-            result.ApprobationCode.Should().BeNull();
+            result.ApprovationCode.Should().BeNull();
         }
 
         [Fact]
@@ -90,7 +90,7 @@ namespace AcmeSchool.UnitTests.Application.UseCases
             var student = CreateStudentWithId(command.StudentId);
             
             var approvedPayment = new RegistrationFeePayment(course.Id, student.Id, course.RegistrationFee, PaymentMethod.BankTransfer);
-            approvedPayment.Approbe(_fixture.Create<string>());
+            approvedPayment.Approve(_fixture.Create<string>());
             course.PayRegistrationFee(approvedPayment);
             course.EnrollStudent(student);
 
@@ -115,7 +115,7 @@ namespace AcmeSchool.UnitTests.Application.UseCases
             var student = CreateStudentWithId(command.StudentId);
 
             var approvedPayment = new RegistrationFeePayment(course.Id, student.Id, course.RegistrationFee, PaymentMethod.BankTransfer);
-            approvedPayment.Approbe(_fixture.Create<string>());
+            approvedPayment.Approve(_fixture.Create<string>());
             course.PayRegistrationFee(approvedPayment);
 
             _courseRepositoryMock.Setup(repo => repo.GetByIdOrDefaultAsync(command.CourseId)).ReturnsAsync(course);

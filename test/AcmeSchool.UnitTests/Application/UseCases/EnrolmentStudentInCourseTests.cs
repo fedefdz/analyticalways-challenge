@@ -3,6 +3,7 @@ using AcmeSchool.Domain.Entities;
 using AcmeSchool.Domain.Exceptions;
 using AcmeSchool.Domain.Repositories;
 using AcmeSchool.Domain.ValueObjects;
+using AcmeSchool.UnitTests.Common;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -65,7 +66,7 @@ namespace AcmeSchool.UnitTests.Application.UseCases
             var course = CreateCourseWithId(command.CourseId);
 
             var registrationsFeePaid= new RegistrationFeePaid(Guid.NewGuid(), student.Id, course.RegistrationFee, DateTime.Now, PaymentMethod.DebitCard);
-            SetProperty(course, nameof(Course.RegistrationFeePayments), new []{ registrationsFeePaid });   
+            Setter.SetProperty(course, nameof(Course.RegistrationFeePayments), new []{ registrationsFeePaid });   
 
             _courseRepositoryMock.Setup(repo => repo.GetByIdOrDefaultAsync(command.CourseId)).ReturnsAsync(course);
             _studentRepositoryMock.Setup(repo => repo.GetByIdOrDefaultAsync(command.StudentId)).ReturnsAsync(student);
@@ -87,7 +88,7 @@ namespace AcmeSchool.UnitTests.Application.UseCases
             var command = _fixture.Create<EnrollStudentInCourseCommand>();
             var student = CreateStudentWithId(command.StudentId);
             var course = CreateCourseWithId(command.CourseId);
-            SetProperty(course, nameof(Course.Enrollments), new[] { new Enrollment(student.Id, student.Name) });
+            Setter.SetProperty(course, nameof(Course.Enrollments), new[] { new Enrollment(student.Id, student.Name) });
 
             _courseRepositoryMock.Setup(repo => repo.GetByIdOrDefaultAsync(command.CourseId)).ReturnsAsync(course);
             _studentRepositoryMock.Setup(repo => repo.GetByIdOrDefaultAsync(command.StudentId)).ReturnsAsync(student);
@@ -135,14 +136,8 @@ namespace AcmeSchool.UnitTests.Application.UseCases
         private Student CreateStudentWithId(Guid studentId)
         {
             var student = _fixture.Create<Student>();
-            SetProperty(student, nameof(Student.Id), studentId);
+            Setter.SetProperty(student, nameof(Student.Id), studentId);
             return student;
-        }
-
-        private void SetProperty<T>(object instance, string propertyName, T value)
-        {
-            var property = instance.GetType().GetProperty(propertyName);
-            property!.SetValue(instance, value);
-        }
+        }        
     }
 }

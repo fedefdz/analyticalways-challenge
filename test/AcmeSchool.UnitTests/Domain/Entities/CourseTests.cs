@@ -1,6 +1,7 @@
 ﻿using AcmeSchool.Domain.Entities;
 using AcmeSchool.Domain.Exceptions;
 using AcmeSchool.Domain.ValueObjects;
+using AcmeSchool.UnitTests.Common;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using AutoFixture.Xunit2;
@@ -59,7 +60,7 @@ namespace AcmeSchool.UnitTests.Domain.Entities
             // Arrange
             var course = new Course("Test Course", 100m, DateTime.Today, DateTime.Today.AddDays(30));
             var payment = new RegistrationFeePayment(course.Id, Guid.NewGuid(), 100, PaymentMethod.CreditCard);
-            payment.Approbe(Guid.NewGuid().ToString());
+            payment.Approve(Guid.NewGuid().ToString());
 
             // Act
             course.PayRegistrationFee(payment);
@@ -131,14 +132,11 @@ namespace AcmeSchool.UnitTests.Domain.Entities
         public void Constructor_WithValidParameters_SetsPropertiesCorrectly(
             string name,
             decimal registrationFee,
-            DateTime startDate,
-            DateTime endDate,
-            IFixture fixture)
+            DateTime startDate)
         {
             // Arrange
-            endDate = startDate.AddDays(10); // Ensure endDate is after startDate for a valid scenario
-            fixture.Customize(new AutoMoqCustomization());
-
+            var endDate = startDate.AddDays(10);
+            
             // Act
             var course = new Course(name, registrationFee, startDate, endDate);
 
@@ -172,12 +170,10 @@ namespace AcmeSchool.UnitTests.Domain.Entities
         public void Constructor_WithNegativeRegistrationFee_ThrowsCourseInvalidDataException(
             string name,
             DateTime startDate,
-            DateTime endDate,
-            IFixture fixture)
+            DateTime endDate)
         {
             // Arrange
-            var invalidRegistrationFee = -100m; 
-            fixture.Customize(new AutoMoqCustomization());
+            var invalidRegistrationFee = -100m;             
 
             // Act
             Action act = () => new Course(name, invalidRegistrationFee, startDate, endDate);
@@ -185,15 +181,6 @@ namespace AcmeSchool.UnitTests.Domain.Entities
             // Assert
             act.Should().Throw<CourseInvalidDataException>()
                 .WithMessage("*RegistrationFee*could not be negative or zero*");
-        }
-
-        
-    }
-
-    public class AutoMoqDataAttribute : AutoDataAttribute
-    {
-        public AutoMoqDataAttribute() : base(() => new Fixture().Customize(new AutoMoqCustomization()))
-        {
-        }
+        }        
     }
 }

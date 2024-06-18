@@ -54,7 +54,7 @@ namespace AcmeSchool.Application.UseCases.PayRegistrationFeeCourse
             switch (paymentResult.ResultCode)
             {
                 case PaymentResultCodes.Success:
-                    registrationFeePayment.Approbe(paymentResult.ApprovationCode!);
+                    registrationFeePayment.Approve(paymentResult.ApprovationCode!);
                     break;
                 case PaymentResultCodes.InsufficientFunds:
                     registrationFeePayment.Reject();
